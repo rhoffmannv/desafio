@@ -3,6 +3,21 @@ import json
 from collections import Counter
 
 def q3_memory(file_path: str) -> List[Tuple[str, int]]:
+    """
+    Lee archivo JSON con tweets desde path y devuelve el top 10 histórico de usuarios (username)
+    más influyentes en función del conteo de las menciones (@) que registra cada uno de ellos.
+
+    Parameters
+    ----------
+    file_path : str
+        Ruta del archivo JSON.
+
+    Returns
+    -------
+    List[Tuple[str, int]]
+        Una lista de tuplas con el username y las veces que fue mencionado,
+        en orden descendente según cantidad de menciones.
+    """
 
     # Contador para usernames mencionados
     counter_mentioned = Counter()
@@ -15,7 +30,7 @@ def q3_memory(file_path: str) -> List[Tuple[str, int]]:
             # Extracción de "mentioned users"
             mentioned = tweet.get('mentionedUsers')
 
-            if mentioned != None:
+            if mentioned is not None:
                 # Por cada user mencionado en el tweet
                 for user in mentioned:
                     # Actualizar counter de menciones
