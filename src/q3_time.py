@@ -1,9 +1,24 @@
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 import pandas as pd
 import polars as pl
 
 
-def q3_time(file_path: str) -> List[Tuple[str, int]]:   
+def q3_time(file_path: str) -> List[Tuple[str, int]]:
+    """
+    Lee archivo JSON con tweets desde path y devuelve el top 10 histórico de usuarios (username)
+    más influyentes en función del conteo de las menciones (@) que registra cada uno de ellos.
+
+    Parameters
+    ----------
+    file_path : str
+        Ruta del archivo JSON.
+
+    Returns
+    -------
+    List[Tuple[str, int]]
+        Una lista de tuplas con el username y las veces que fue mencionado,
+        en orden descendente según cantidad de menciones.
+    """
     
     # Crear LazyFrame para leer el JSON
     lf_tweets = pl.scan_ndjson(file_path)
@@ -34,6 +49,21 @@ def q3_time(file_path: str) -> List[Tuple[str, int]]:
 
 
 def q3_time_pandas(file_path: str) -> List[Tuple[str, int]]:
+    """
+    Lee archivo JSON con tweets desde path y devuelve el top 10 histórico de usuarios (username)
+    más influyentes en función del conteo de las menciones (@) que registra cada uno de ellos.
+
+    Parameters
+    ----------
+    file_path : str
+        Ruta del archivo JSON.
+
+    Returns
+    -------
+    List[Tuple[str, int]]
+        Una lista de tuplas con el username y las veces que fue mencionado,
+        en orden descendente según cantidad de menciones.
+    """
 
     # Carga de datos del JSON en Dataframe de Pandas
     df = pd.read_json(file_path, lines=True)
@@ -58,17 +88,47 @@ def q3_time_pandas(file_path: str) -> List[Tuple[str, int]]:
 
 
 
-def get_usernames_list(users_list):
+def get_usernames_list(users_list: List[Dict[str, str]]) -> List[str]:
+    """
+    Extrae la key "username" de cada elemento de una lista de "users".
+
+    Parameters
+    ----------
+    users_list : List[Dict[str, str]]
+        Lista con diccionario de datos por cada user.
+
+    Returns
+    -------
+    List[str]
+        Lista con el "username" de cada "user".
+    """
+
     # Verificar que la lista no es None
     if users_list is not None:
         # Se crea una lista extrayendo solo el "username" del diccionario de cada user
         return [user["username"] for user in users_list]
     # Si es None devolver lista vacia
     return []
-    
 
-def extract_usernames(batch):
+    
+def extract_usernames(batch: pl.DataFrame) -> pl.Series:
+    """
+    Extrae la key "username" de cada elemento de un Dataframe.
+
+    Parameters
+    ----------
+    batch : pl.DataFrame
+        Dataframe con listas de "users" (diccionario) en cada elemento.
+
+    Returns
+    -------
+    pl.Series
+        Serie de Polars con lista de "username" en cada elemento.
+    """
+
     # Se aplica función "get_usernames_list" a cada item dentro del batch
     usernames_lists = [get_usernames_list(x) for x in batch]
     # Se devuelve la lista como una serie de Polars 
     return pl.Series(usernames_lists)
+
+
