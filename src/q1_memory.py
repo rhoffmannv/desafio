@@ -3,6 +3,21 @@ from datetime import datetime
 import json
 
 def q1_memory(file_path: str) -> List[Tuple[datetime.date, str]]:
+    """
+    Lee archivo JSON con tweets desde path y devuelve las top 10 fechas donde hay más tweets,
+    mencionando el usuario (username) que más publicaciones tiene por cada uno de esos días.
+
+    Parameters
+    ----------
+    file_path : str
+        Ruta del archivo JSON.
+
+    Returns
+    -------
+    List[Tuple[datetime.date, str]]
+        Una lista de tuplas con el dia y el usuario con más tweets en el dia,
+        en orden descendente según publicaciones totales en los días.
+    """
   
     # Diccionario para guardar numero de tweets por cada día
     date_counts = {}
