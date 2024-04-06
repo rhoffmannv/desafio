@@ -4,6 +4,21 @@ from datetime import datetime
 import polars as pl
 
 def q1_time(file_path: str) -> List[Tuple[datetime.date, str]]:
+    """
+    Lee archivo JSON con tweets desde path y devuelve las top 10 fechas donde hay más tweets,
+    mencionando el usuario (username) que más publicaciones tiene por cada uno de esos días.
+
+    Parameters
+    ----------
+    file_path : str
+        Ruta del archivo JSON.
+
+    Returns
+    -------
+    List[Tuple[datetime.date, str]]
+        Una lista de tuplas con el dia y el usuario con más tweets en el dia,
+        en orden descendente según publicaciones totales en los días.
+    """
     
     # Crear LazyFrame para leer el JSON
     lf_tweets = pl.scan_ndjson(file_path, low_memory=True)
@@ -49,6 +64,22 @@ def q1_time(file_path: str) -> List[Tuple[datetime.date, str]]:
 
 
 def q1_time_pandas(file_path: str) -> List[Tuple[datetime.date, str]]:
+    """
+    Lee archivo JSON con tweets desde path y devuelve las top 10 fechas donde hay más tweets,
+    mencionando el usuario (username) que más publicaciones tiene por cada uno de esos días.
+
+    Parameters
+    ----------
+    file_path : str
+        Ruta del archivo JSON.
+
+    Returns
+    -------
+    List[Tuple[datetime.date, str]]
+        Una lista de tuplas con el dia y el usuario con más tweets en el dia,
+        en orden descendente según publicaciones totales en los días.
+    """
+    
     # Carga de datos del JSON en Dataframe de Pandas
     df_tweets = pd.read_json(file_path, lines=True)
        
