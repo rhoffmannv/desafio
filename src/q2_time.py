@@ -40,18 +40,19 @@ def q2_time_pandas(file_path: str) -> List[Tuple[str, int]]:
     # Carga de datos del JSON en Dataframe de Pandas
     df = pd.read_json(file_path, lines=True)
 
-    # Contador para emojis
-    counter_emojis = Counter()
-    
-    # Iterando en columna "content"
-    for content in df['content']:
-        # Obtención de emojis en el contenido actual
-        emojis_list = get_emojis_list(content)
-        # Actualizar counter de emojis
-        counter_emojis.update(emojis_list)
+    # Extracción de columna content
+    df_content = df['content']
 
-    # Extraccion de los 10 emojis mas usados
-    out = counter_emojis.most_common(10)
+    # Aplicación de función para extraer lista de emojis de cada content
+    df_emojis = df_content.apply(get_emojis_list)
+    # "Abrir" cada fila, creando una fila nueva por cada emoji en la lista
+    df_emojis = df_emojis.explode()
+
+    # Contar y ordenar por apariciones de cada emoji y extraer los 10 mayores
+    emojis_max = df_emojis.value_counts()[0:10]
+
+    # Ordenar serie de pandas como lista de tuplas
+    out = list(zip(emojis_max, emojis_max.index))
     
     return out
 
